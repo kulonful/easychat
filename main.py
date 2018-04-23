@@ -3,6 +3,7 @@ print("# Author's: kulonful, pufit\n# Socket's-TCP chat\n# [!] Server [!]\n# [?]
 
 import socket as s
 import sys as system
+import time
 
 socket = s.socket()
 clients = []
@@ -31,10 +32,15 @@ if input('Input [Y] for accept or [N] for decline: ').upper() == 'N':
 socket.bind(('', serverSettings.port))
 socket.listen(serverSettings.valueClients)
 
-print('Try start server')
+print('Server started on ' + str(serverSettings.port) + ' port\nServer start working when all users will be connected.')
+
+while len(clients) != serverSettings.valueClients:
+    wsclient, address = socket.accept()
+    print(wsclient)
+    print(address)
+    acceptUser(wsclient, address)
 
 while True:
-    wsclient, address = socket.accept()
-    acceptUser(wsclient, address)
-    data = socket.recv(1024).decode()
-    print(data)
+    for ws in clients:
+        data = ws[0].recv(2048).decode()
+        print(data)
